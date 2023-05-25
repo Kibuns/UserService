@@ -16,7 +16,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func send(msgName string, twoot *Models.User) {
+func send(msgName string, user *Models.User) {
     conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
     failOnError(err, "Failed to connect to RabbitMQ")
     defer conn.Close()
@@ -38,7 +38,7 @@ func send(msgName string, twoot *Models.User) {
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
     defer cancel()
 
-    body, err := json.Marshal(twoot)
+    body, err := json.Marshal(user)
     if err != nil {
         log.Panicf("Failed to marshal Twoot: %s", err)
     }
