@@ -17,7 +17,7 @@ func failOnError(err error, msg string) {
 }
 
 func send(msgName string, user *Models.User) {
-    conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+    conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/") //locally change rabbitmq to localhost
     failOnError(err, "Failed to connect to RabbitMQ")
     defer conn.Close()
 
