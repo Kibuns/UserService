@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -47,6 +49,11 @@ func storeUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
+	// Encrypt user.password using bcrypt
+	var hashedUserInput = sha256.Sum256([]byte(user.Password))
+	var hashedString = hex.EncodeToString(hashedUserInput[:])
+	user.Password = hashedString
 
 	// insert the user into the database
 	err = DAL.RegisterUser(user)
