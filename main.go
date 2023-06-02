@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/Kibuns/UserService/DAL"
 	"github.com/Kibuns/UserService/Models"
@@ -16,7 +19,18 @@ import (
 
 func main() {
 	fmt.Println("Started UserService")
-	handleRequests()
+	// create a channel to receive signals to stop the application
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+	
+	// start the goroutine to receive messages from the queue
+	go receiveDeleted()
+	
+	// start the goroutine to handle API requests
+	go handleRequests()
+	
+	// wait for a signal to stop the application
+	<-stop
 }
 
 //controllers
