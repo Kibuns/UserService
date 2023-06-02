@@ -60,27 +60,35 @@ func ReadAllUsers() ([]primitive.M, error) {
 
 
 
-func SearchUser(id string) (value primitive.M) {
-	twootCollection := client.Database("TwootDB").Collection("twoots")
+func SearchUser(username string) (value primitive.M) {
+	userCollection := client.Database("UserDB").Collection("users")
 	// convert the hexadecimal string to an ObjectID type
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		panic(err)
-	}
 
 	// retrieve the document with the specified _id
 	var result bson.M
-	err = twootCollection.FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&result)
+	err := userCollection.FindOne(context.TODO(), bson.D{{Key: "username", Value: username}}).Decode(&result)
 	if err != nil {
 		panic(err)
 	}
-
 	// display the retrieved document
 	fmt.Println("displaying the result from the search query")
 	fmt.Println(result)
 	value = result
 
 	return value
+}
+
+func DeleteAllOfUser(username string) {
+    userCollection := client.Database("UserDB").Collection("users")
+
+    // Define the filter to match the username
+    filter := bson.M{"username": username}
+
+    // Delete all documents that match the filter
+    _, err := userCollection.DeleteMany(context.TODO(), filter)
+    if err != nil {
+        // Handle the error
+    }
 }
 
 

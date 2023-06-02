@@ -31,9 +31,10 @@ func returnAll(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(getAllUsers())
 }
 
-func returnUser(w http.ResponseWriter, r *http.Request) {
-	var idParam string = mux.Vars(r)["id"]
-	json.NewEncoder(w).Encode(DAL.SearchUser(idParam))
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	var idParam string = mux.Vars(r)["user"]
+	DAL.DeleteAllOfUser(idParam)
+	fmt.Fprintf(w, "deleted everything from user: " + idParam)
 }
 
 func storeUser(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +80,7 @@ func handleRequests() {
 
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/all", returnAll)
-	myRouter.HandleFunc("/get/{id}", returnUser)
+	myRouter.HandleFunc("/delete/{user}", deleteUser)
 	myRouter.HandleFunc("/create", storeUser)
 
 	log.Fatal(http.ListenAndServe(":9998", myRouter))
