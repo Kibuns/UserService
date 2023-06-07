@@ -78,6 +78,11 @@ func SearchUser(username string) (value primitive.M) {
 	return value
 }
 
+
+
+//----Update----
+
+//----Delete----
 func DeleteAllOfUser(username string) {
     userCollection := client.Database("UserDB").Collection("users")
 
@@ -90,11 +95,6 @@ func DeleteAllOfUser(username string) {
         // Handle the error
     }
 }
-
-
-//----Update----
-
-//----Delete----
 
 // other
 func newClient() (value mongo.Client) {

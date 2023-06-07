@@ -96,8 +96,14 @@ func handleRequests() {
 	myRouter.HandleFunc("/all", returnAll)
 	myRouter.HandleFunc("/delete/{user}", deleteUser)
 	myRouter.HandleFunc("/create", storeUser)
+	myRouter.HandleFunc("/get/{user}", getUser)
 
 	log.Fatal(http.ListenAndServe(":9998", myRouter))
+}
+
+func getUser(w http.ResponseWriter, r *http.Request){
+	var userParam string = mux.Vars(r)["user"]
+	json.NewEncoder(w).Encode(DAL.SearchUser(userParam))
 }
 
 
